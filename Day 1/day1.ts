@@ -6,7 +6,7 @@ const LEFT = -1;
 const RIGHT = 1;
 
 let pos = 50;
-let prevPos = 50;
+let prevPos = pos;
 
 let zero_count = 0;
 
@@ -14,7 +14,7 @@ let zero_count = 0;
 let movementDelta: string | number = '';
 let movementDirection = 0;
 
-const textFile = await Deno.readTextFile("input.txt");
+const textFile = await Deno.readTextFile("input_old.txt");
 
 let testBreak = 0;
 let lineCount = 1;
@@ -27,29 +27,9 @@ for await (const textChar of textFile) {
     if( textChar == "\n" ) {
 
         if(movementDirection == LEFT) { // Moving Left
-            console.log(`Movement Delta: ${movementDelta} on Line: ${lineCount} - Number Format: ${Number(movementDelta)} - PreMath: ${pos - Number(movementDelta)}`);
             pos -= Number(movementDelta);
-            if (pos < POS_MIN) { // Crosses over zero
-
-                // pos += POS_MAX + 1; // Correcting for Fencepost
-                
-                // PART 2
-                // if (prevPos != 0){
-                //     console.log('Crossed Zero! *click*')
-                //     zero_count += 1;
-                // }
-            }
         } else if(movementDirection == RIGHT) { // Moving Right
             pos += Number(movementDelta);
-            if (pos > POS_MAX) { // Crosses over max
-                // pos -= POS_MAX + 1; // Correcting for Fencepost
-
-                // PART 2
-                // if (prevPos != 0){
-                //     console.log('Crossed Zero! *click*')
-                //     zero_count += 1;
-                // }
-            }
         }
 
         console.log(`Movement Direction: ${movementDirection == -1 ? 'Left' : 'Right'}, Movement Delta: ${movementDelta}, Previous Position: ${prevPos}, New Position: ${pos}. Zero Hits: ${zero_count}`);
@@ -62,9 +42,8 @@ for await (const textChar of textFile) {
                 // console.log('Overflow! Crossed Zero! *click*' + ' Current Pos: ' + pos)
 
                 // PART 2
-                // zero_count += 1;
+                zero_count += 1;
             }
-            // zero_count--; // Correcting for an over count
         } else if (pos < POS_MIN) {
             // console.log(`Something Fucked up in a spectacular way! On Line: ${lineCount}`);
             while (pos < POS_MIN) {
@@ -73,13 +52,11 @@ for await (const textChar of textFile) {
                 // console.log('Underflow! Crossed Zero! *click* Current Pos: ' + pos)
 
                 // // PART 2
-                // zero_count += 1;
+                zero_count += 1;
             }
-            // zero_count--; // Correcting for an over count
         }
 
         if(pos == 0 && prevPos != 0) {
-            console.log('Landed on Zero! *click*')
             zero_count += 1;
         }
 
